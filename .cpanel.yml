@@ -3,5 +3,8 @@ deployment:
     - export SOURCE_PATH=~/repositories/rait-acm-compiled
     - export DEST_PATH=/home/raithosting/public_html
 
-      # Use rsync to copy everything except .git and README.md, and overwrite all files
-    - /usr/bin/rsync -av --delete --exclude '.git' --exclude 'README.md' $SOURCE_PATH/ $DEST_PATH/
+      # Remove the contents of the destination folder except .git and README.md
+    - find $DEST_PATH -mindepth 1 -not -name '.git' -not -name 'README.md' -exec rm -rf {} +
+
+      # Copy everything from source to destination, excluding .git and README.md
+    - find $SOURCE_PATH -mindepth 1 -not -name '.git' -not -name 'README.md' -exec cp -r {} $DEST_PATH/ \;
