@@ -3,8 +3,13 @@ deployment:
     - export SOURCE_PATH=~/repositories/rait-acm-compiled
     - export DEST_PATH=/home/raithosting/public_html
 
-      # Remove the contents of the destination folder except .git and README.md
-    - find $DEST_PATH -mindepth 1 -not -name '.git' -not -name 'README.md' -exec rm -rf {} +
+      # Remove everything in the destination except .git and README.md
+    - rm -rf $DEST_PATH/*
+    - rm -f $DEST_PATH/.* # Remove hidden files, but leave .git
 
-      # Copy everything from source to destination, excluding .git and README.md
-    - find $SOURCE_PATH -mindepth 1 -not -name '.git' -not -name 'README.md' -exec cp -r {} $DEST_PATH/ \;
+
+      # Copy all files and directories from source to destination, excluding .git and README.md
+    - cp -r $SOURCE_PATH/* $DEST_PATH/
+    - cp -r $SOURCE_PATH/.[!.]* $DEST_PATH/ # Copy hidden files except .git and README.md
+    - rm -rf $DEST_PATH/.git
+    - rm -f $DEST_PATH/README.md
